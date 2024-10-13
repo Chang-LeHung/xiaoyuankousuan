@@ -17,6 +17,8 @@ if __name__ == '__main__':
 	while True:
 		try:
 			write_answer()
+			import time
+			time.sleep(0.2)
 		except Exception as e:
 			print(e, flush=True)
 		finally:
