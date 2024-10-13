@@ -1,4 +1,6 @@
+import hashlib
 import json
+import time
 from functools import cache
 
 from mitmproxy import http
@@ -27,5 +29,12 @@ def response(flow: http.HTTPFlow) -> None:
 
 	# pk 场则劫持判题 js 文件，让所有的题目都判断为正确
 	if "leo.fbcontent.cn/bh5/leo-web-oral-pk/exercise_" in flow.request.url and ".js" in flow.request.url:
+		save(flow.response.text)
 		flow.response.text = load_js("exercise.js")
 		print("intercept js")
+
+
+def save(text: str):
+	hashcode = hashlib.md5(text.encode("utf-8")).hexdigest()
+	with open(f"../js/{hashcode}_{time.time()}", "w") as f:
+		f.write(text)
